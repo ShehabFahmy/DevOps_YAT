@@ -142,3 +142,75 @@ case ${#s} in
 		echo "Nothing";;
 esac
 ```
+9. Write a script called `mychmod` to give execute permission to all files and directories in your home directory.
+```bash
+#!/bin/bash
+chmod +x ~/*
+```
+==10.== Write a script called `mybackup` to create a backup of only files in your home directory.
+```bash
+
+```
+==11.== Write a script called `mymail` to send a mail to all users in the system.
+Note: write the mail body in a file called `mtemplate`.
+```bash
+
+```
+==12.== Write a script called `chkmail` to check for new mails every 10 seconds. Note: mails are saved in `/var/mail/username`.
+```bash
+
+```
+#### Using `sed` Utility
+13. Display the lines that contain the word `lp` in `/etc/passwd` file.
+```bash
+cat /etc/passwd | sed -n '/lp/p'
+```
+14. Display `/etc/passwd` file except the third line.
+```bash
+cat /etc/passwd | sed '3d'
+```
+15. Display `/etc/passwd` file except the last line.
+```bash
+cat /etc/passwd | sed '$d'
+```
+16. Display `/etc/passwd` file except the lines that contain the word `lp`.
+```bash
+cat /etc/passwd | sed -n '/lp/!p'
+```
+17. Substitute all the words that contain `lp` with `mylp` in `/etc/passwd` file.
+```bash
+cat /etc/passwd | sed 's/lp/mylp/g'
+```
+#### Using `awk` Utility
+18. Print `full name (comment)` of all users in the system.
+```bash
+cat /etc/passwd | awk -F":" '{print $5}'
+```
+19. Print `login`, `full name (comment)` and `home directory` of all users, each line preceded by a line number.
+```bash
+cat /etc/passwd | awk -F":" '{print NR, "\"" $1 "\"", "\"" $5 "\"", "\"" $6 "\""}'
+```
+20. Print `login`, `uid` and `full name (comment)` of those `uid` is greater than 500.
+```bash
+cat /etc/passwd | awk -F":" '{if ($3 > 500) print "Login:", $1, "UID:", $3, "Comment:", $5}'
+```
+21. Print `login`, `uid` and `full name (comment)` of those `uid` is exactly 500.
+```bash
+cat /etc/passwd | awk -F":" '{if ($3 == 500) print "Login:", $1, "UID:", $3, "Comment:", $5}'
+```
+22. Print line from 5 to 15 from `/etc/passwd`.
+```bash
+cat /etc/passwd | awk -F":" '{if (NR >= 5 && NR <= 15) print $0}'
+```
+23. Change `lp` to `mylp`.
+```bash
+cat /etc/passwd | awk -F":" '{gsub("lp", "mylp", $0); print $0}' | grep -i "mylp"
+```
+24. Print all information about greatest `uid`.
+```bash
+cat /etc/passwd | awk -F":" 'BEGIN {max_id = 0; info = "";} $3 > max_id {max_id = $3; info = $0;} END {print info}' | awk -F":" '{print $1, $2, $3, $4, $5, $6, $7}'
+```
+25. Get the sum of all accounts id’s.
+```bash
+cat /etc/passwd | awk -F":" 'BEGIN {sum = 0} {sum += $3} END {print sum}'
+```
